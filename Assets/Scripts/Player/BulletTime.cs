@@ -22,7 +22,7 @@ public class BulletTime : MonoBehaviour
         {
             ResetTimeScale();
             bulletTimeDelay = currentTime + 1f;
-            InvokeRepeating(nameof(ResetBulletTime), 3, 0.1f);
+            InvokeRepeating(nameof(ResetBulletTime), 3, Time.unscaledDeltaTime);
         }
 
         bulletTimeSlider.value = duration;

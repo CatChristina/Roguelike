@@ -1,25 +1,23 @@
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GunController : MonoBehaviour
 {
-    TMP_Text ammoText;
+    private TMP_Text ammoText;
+    private RectTransform reticle;
 
-    void Start()
+    private void Start()
     {
         reticle = GameObject.FindGameObjectWithTag("Reticle").GetComponent<RectTransform>();
         ammoText = GameObject.FindGameObjectWithTag("AmmoCounter").GetComponent<TMP_Text>();
         _currentAmmo = _maxAmmo;
         ammoText.text = new string('I', _currentAmmo);
+
+        reticle.sizeDelta = new Vector2(_spread * 50, _spread * 50);
     }
 
-    private RectTransform reticle;
 
-    private void FixedUpdate()
-    {
-        reticle.sizeDelta = new Vector2(_spread * 2, _spread * 2);
-    }
+
 
     private void Update()
     {
@@ -42,7 +40,7 @@ public class GunController : MonoBehaviour
     public float _fireRate;
 
     public int _shotsPerClick;
-    public float _timeBetweenShots;
+    public float _timeBetweenShots; // Used for burst fire
     public bool _automatic;
 
     public float _spread;
@@ -66,7 +64,7 @@ public class GunController : MonoBehaviour
 
             for (int i = 0; shotsLeft > i;)
             {
-                Instantiate(_bullet, _shotPoint.transform.position, Quaternion.Euler(Random.Range(-_spread / 2, _spread / 2), Random.Range(-_spread / 2, _spread / 2),0));
+                Instantiate(_bullet, _shotPoint.transform.position, Quaternion.identity);
                 shotsLeft--;
             }
         }
@@ -86,7 +84,13 @@ public class GunController : MonoBehaviour
 
     public void RefillAmmo()
     {
-        _currentAmmo += _maxAmmo / 2;
+        _currentAmmo += _maxAmmo / 3;
+
+        if (_currentAmmo > _maxAmmo)
+        {
+            _currentAmmo = _maxAmmo;
+        }
+
         ammoText.text = new string('I', _currentAmmo);
     }
 }

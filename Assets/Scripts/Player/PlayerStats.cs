@@ -25,6 +25,14 @@ public class PlayerStats : MonoBehaviour
         healthSlider.value = _health;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            TakeDamage(40);
+        }
+    }
+
     public void ModifyXP(float xpAmount)
     {
         _xp += xpAmount;
@@ -63,6 +71,8 @@ public class PlayerStats : MonoBehaviour
     public void TakeDamage(int damage)
     {
         _health -= damage;
+        healthSlider.value = _health;
+        healthText.text = _health.ToString();
 
         if (_health <= 0)
         {

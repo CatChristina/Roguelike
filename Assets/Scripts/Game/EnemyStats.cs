@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemyStats : MonoBehaviour
 {
-    private int health;
+    public int health;
 
     public float xpOnKill = 5;
 
@@ -12,20 +12,6 @@ public class EnemyStats : MonoBehaviour
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
-    }
-
-    private void Update()
-    {
-
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Projectile"))
-        {
-            int damage = other.GetComponent<ProjectileStats>().damage;
-            TakeDamage(damage);
-        }
     }
 
     // Makes the enemy take damage and drop a set powerup when it dies

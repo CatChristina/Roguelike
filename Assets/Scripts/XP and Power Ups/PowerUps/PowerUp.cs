@@ -22,7 +22,7 @@ public class PowerUp : MonoBehaviour
             selectedPowerUp = powerUpBase[1];
             gameObject.GetComponent<Renderer>().material.color = Color.red;
         }
-        else if (chance >= 80)
+        else if (chance >= 70)
         {
             selectedPowerUp = powerUpBase[3];
             gameObject.GetComponent<Renderer>().material.color = Color.green;
