@@ -37,6 +37,8 @@ public class PowerUp : MonoBehaviour
         value = selectedPowerUp.valueIncrease;
     }
 
+
+    //Checks against the PowerUps enum to determine which function to call
     private void OnTriggerEnter(Collider other)
     {
         if (!other.gameObject.CompareTag("Player"))

@@ -24,7 +24,7 @@ public class CameraMovement : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // Uses a native array to store the rotation data so that it can be accessed by the job thread
+        // Uses a native array to store the rotation data so that it can be accessed by the job thread (ALWAYS destroy this someone in the script!!!)
         rotationData = new NativeArray<float>(2, Allocator.Persistent);
     }
 
@@ -98,8 +98,6 @@ public class CameraMovement : MonoBehaviour
     // Update camera position and rotation
     private void MousePos()
     {
-        //Debug.Log(xRotation + yRotation);
-
         cameraPosition.rotation = Quaternion.Euler(0, yRotation, 0);
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
 

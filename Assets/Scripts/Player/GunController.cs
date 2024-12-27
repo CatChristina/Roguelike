@@ -16,9 +16,6 @@ public class GunController : MonoBehaviour
         reticle.sizeDelta = new Vector2(_spread * 50, _spread * 50);
     }
 
-
-
-
     private void Update()
     {
         if (Input.GetButton("Fire") && _automatic)
@@ -50,6 +47,8 @@ public class GunController : MonoBehaviour
     public GameObject _bullet;
     public GameObject _shotPoint;
 
+
+    // Fires the gun
     private void ShootGun()
     {
 
@@ -70,7 +69,7 @@ public class GunController : MonoBehaviour
         }
         else
         {
-            //Play Out of ammo sound
+            // Play Out of ammo sound
         }
 
         ammoText.text = new string('I', _currentAmmo);

@@ -33,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
     public float _moveSpeed;
     public float _maxSpeed = 10;
 
+
+    // Contols the basic movement of the player
     private void MovePlayer()
     {
         horiz = Input.GetAxisRaw("Horizontal");
