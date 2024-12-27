@@ -25,6 +25,7 @@ public class PlayerStats : MonoBehaviour
         healthSlider.value = _health;
     }
 
+    // Damages the player if they collide with an enemy
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
@@ -33,6 +34,8 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+
+    // Gives the player XP
     public void ModifyXP(float xpAmount)
     {
         _xp += xpAmount;
@@ -42,6 +45,7 @@ public class PlayerStats : MonoBehaviour
             _xp -= xpSlider.maxValue;
 
             xpSlider.maxValue += 20;
+            healthSlider.maxValue = _maxHealth;
 
             ModifyHealth(10);
         }
@@ -49,6 +53,8 @@ public class PlayerStats : MonoBehaviour
         xpSlider.value = _xp;
     }
 
+
+    // Increases the players max health and heals them
     public void ModifyHealth(float healthAmount)
     {
         _maxHealth += healthAmount;
@@ -57,17 +63,21 @@ public class PlayerStats : MonoBehaviour
 
         healthText.text = _health.ToString();
     }
+
+    // Increases the players speed (Currently Unused)
     public void ModifySpeed(float speedAmount)
     {
         playerMove._maxSpeed += speedAmount;
         playerMove._moveSpeed += speedAmount;
     }
 
+    // Gives the player more jumps
     public void ModifyJumpCount(int value)
     {
         playerMove._maxJumps += value;
     }
 
+    // Deals damage to the player
     public void TakeDamage(int damage)
     {
         _health -= damage;

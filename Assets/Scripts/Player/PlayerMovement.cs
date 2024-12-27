@@ -73,6 +73,8 @@ public class PlayerMovement : MonoBehaviour
     private float _jumpHeight = 100;
     private float checkDelay;
 
+
+    // Allows the player to jump
     private void Jump()
     {
         if (Input.GetButtonDown("Jump") && jumpCount > 0)
@@ -85,6 +87,8 @@ public class PlayerMovement : MonoBehaviour
 
     private Ray _groundRay;
 
+
+    // Checks if the player is close enough to the ground
     private bool GroundCheck()
     {
         if (Physics.Raycast(transform.position, -transform.up, 1.1f) && Time.time > checkDelay)

@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GunController : MonoBehaviour
 {
@@ -13,16 +14,20 @@ public class GunController : MonoBehaviour
         _currentAmmo = _maxAmmo;
         ammoText.text = new string('I', _currentAmmo);
 
-        reticle.sizeDelta = new Vector2(_spread * 50, _spread * 50);
+        _canShoot = true;
+
+        reticle.sizeDelta = new Vector2(spread * 50, spread * 50);
     }
 
+
+    // Input checks
     private void Update()
     {
-        if (Input.GetButton("Fire") && _automatic)
+        if (Input.GetButton("Fire") && automatic && _canShoot)
         {
             ShootGun();
         }
-        else if (Input.GetButtonDown("Fire") && !_automatic)
+        else if (Input.GetButtonDown("Fire") && !automatic && _canShoot)
         {
             ShootGun();
         }
@@ -36,11 +41,11 @@ public class GunController : MonoBehaviour
     public int _maxAmmo;
     public float _fireRate;
 
-    public int _shotsPerClick;
-    public float _timeBetweenShots; // Used for burst fire
-    public bool _automatic;
+    public int shotsPerClick;
+    public float timeBetweenShots; // Used for burst fire
+    public bool automatic;
 
-    public float _spread;
+    public float spread;
 
     private bool _canShoot;
 
@@ -59,7 +64,7 @@ public class GunController : MonoBehaviour
 
             Invoke(nameof(ResetShot), _fireRate);
 
-            int shotsLeft = _shotsPerClick;
+            int shotsLeft = shotsPerClick;
 
             for (int i = 0; shotsLeft > i;)
             {
@@ -75,12 +80,13 @@ public class GunController : MonoBehaviour
         ammoText.text = new string('I', _currentAmmo);
     }
 
+    // Readies the weapon to shoot
     private void ResetShot()
     {
         _canShoot = true;
     }
 
-
+    // Refills the weapons ammo by 1/3 of the max ammo
     public void RefillAmmo()
     {
         _currentAmmo += _maxAmmo / 3;

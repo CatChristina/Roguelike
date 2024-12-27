@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -25,15 +26,21 @@ public class EnemySpawner : MonoBehaviour
 
     private List<GameObject> currentWaveEnemies;
 
-    // Spawns enemies at random predetermined locations
+    // Spawns enemies at random predetermined locations, increasing their health each wave
     private void SpawnEnemies()
     {
         for (int i = 0; i < enemiesPerWave; i++)
         {
-            currentWaveEnemies.Add(Instantiate(enemies[Random.Range(0, enemies.Length)], spawnLocations[Random.Range(0, spawnLocations.Length)].transform.position, Quaternion.identity));
+            GameObject enemy = Instantiate(enemies[Random.Range(0, enemies.Length)], spawnLocations[Random.Range(0, spawnLocations.Length)].transform.position, Quaternion.identity);
+            EnemyStats enemyStats = enemy.GetComponent<EnemyStats>();
+            NavMeshAgent enemyAgent = enemy.GetComponent<NavMeshAgent>();
+
+            enemyStats.health += wave * 10;
+            enemyAgent.speed += wave * 0.2f;
+
+            currentWaveEnemies.Add(enemy);
         }
 
-        //InvokeRepeating(nameof(CheckEnemyCount), 10, 10);
         Debug.Log("Spawning Enemies.");
     }
 
@@ -45,7 +52,6 @@ public class EnemySpawner : MonoBehaviour
         if (currentWaveEnemies.Count <= 0)
         {
             NextWave();
-            //CancelInvoke(nameof(CheckEnemyCount));
         }
     }
 

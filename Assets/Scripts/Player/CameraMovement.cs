@@ -24,7 +24,7 @@ public class CameraMovement : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // Uses a native array to store the rotation data so that it can be accessed by the job thread (ALWAYS destroy this someone in the script!!!)
+        // Uses a native array to store the rotation data so that it can be accessed by the job thread (ALWAYS destroy this somewhere in the script!!!)
         rotationData = new NativeArray<float>(2, Allocator.Persistent);
     }
 
@@ -37,6 +37,8 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
+
+    // Gets mouse input and runs the other functions
     private void Update()
     {
         mouseX = Input.GetAxisRaw("Mouse X");
@@ -69,6 +71,8 @@ public class CameraMovement : MonoBehaviour
         yRotation = rotationData[1];
     }
 
+
+    // Job that handles the cameras rotation, storing the data within the NativeArray
     [BurstCompile]
     private struct CameraJob : IJob
     {

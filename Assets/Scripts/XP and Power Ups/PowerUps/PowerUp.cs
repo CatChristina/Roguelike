@@ -10,6 +10,7 @@ public class PowerUp : MonoBehaviour
     private PlayerStats entity;
     private PlayerMovement playerMove;
 
+    // Sets the PowerUp type, color and value based on a random chance, gets the PlayerStats script to
     private void Awake()
     {
         entity = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
@@ -35,10 +36,12 @@ public class PowerUp : MonoBehaviour
 
         powerUpType = selectedPowerUp.powerUps;
         value = selectedPowerUp.valueIncrease;
+
+        Invoke(nameof(DestroyPowerUp), 30);
     }
 
 
-    //Checks against the PowerUps enum to determine which function to call
+    // Checks against the PowerUps enum to determine which function to call
     private void OnTriggerEnter(Collider other)
     {
         if (!other.gameObject.CompareTag("Player"))
@@ -68,5 +71,23 @@ public class PowerUp : MonoBehaviour
         }
 
         Destroy(gameObject);
+    }
+
+
+    int Counter = 50;
+    // Destroys the PowerUp once Counter reaches 0
+    private void DestroyPowerUp()
+    {
+        Renderer renderer = gameObject.GetComponent<Renderer>();
+        renderer.enabled = !renderer.enabled;
+
+        Invoke(nameof(DestroyPowerUp), 0.01f * Counter);
+
+        Counter--;
+
+        if (Counter <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 }

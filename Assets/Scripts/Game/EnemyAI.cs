@@ -14,6 +14,8 @@ public class EnemyAI : MonoBehaviour
         InvokeRepeating(nameof(MoveToPlayer), 0, Random.Range(0.5f, 2));
     }
 
+
+    // Sets the enemies destination to the players position with a random delay
     private void MoveToPlayer()
     {
         agent.destination = player.transform.position;
