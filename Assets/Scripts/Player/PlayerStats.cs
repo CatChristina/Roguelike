@@ -12,10 +12,6 @@ public class PlayerStats : MonoBehaviour
     public Slider healthSlider;
     public Slider xpSlider;
 
-    [SerializeField] private float _xp = 0;
-    [SerializeField] private float _health;
-    [SerializeField] private float _maxHealth = 100;
-
     private void Awake()
     {
         playerMove = GetComponent<PlayerMovement>();
@@ -34,7 +30,16 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            TakeDamage(1);
+        }
+    }
 
+
+    [SerializeField] private float _xp = 0;
     // Gives the player XP
     public void ModifyXP(float xpAmount)
     {
@@ -53,7 +58,8 @@ public class PlayerStats : MonoBehaviour
         xpSlider.value = _xp;
     }
 
-
+    [SerializeField] private float _health;
+    [SerializeField] private float _maxHealth = 100;
     // Increases the players max health and heals them
     public void ModifyHealth(float healthAmount)
     {

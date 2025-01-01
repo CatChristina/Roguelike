@@ -6,7 +6,6 @@ public class ProjectileStats : MonoBehaviour
     public int damage;
     public float velocity;
     private Rigidbody rb;
-    private HashSet<Collider> hitColliders;
 
     private void Start()
     {
@@ -21,6 +20,8 @@ public class ProjectileStats : MonoBehaviour
     }
 
     private Vector3 previousPosition;
+    private HashSet<Collider> hitColliders;
+
     // Does the raycast for collision detection
     private void FixedUpdate()
     {

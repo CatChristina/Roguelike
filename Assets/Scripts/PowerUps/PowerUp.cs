@@ -14,30 +14,35 @@ public class PowerUp : MonoBehaviour
     private void Awake()
     {
         entity = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+        RandomPowerUp();
 
+
+        Invoke(nameof(DestroyPowerUp), 30);
+    }
+
+    private void RandomPowerUp()
+    {
         int chance = Random.Range(0, 99);
         Debug.Log("Chance = " + chance);
 
         if (chance <= 14 && chance >= 3)
         {
             selectedPowerUp = powerUpBase[1];
-            gameObject.GetComponent<Renderer>().material.color = Color.red;
+            gameObject.GetComponent<Renderer>().material.color = new Color(1, 0, 0); // Red
         }
         else if (chance >= 70)
         {
             selectedPowerUp = powerUpBase[3];
-            gameObject.GetComponent<Renderer>().material.color = Color.green;
+            gameObject.GetComponent<Renderer>().material.color = new Color(0, 1, 0); // Green
         }
         else
         {
             selectedPowerUp = powerUpBase[0];
-            gameObject.GetComponent<Renderer>().material.color = Color.blue;
+            gameObject.GetComponent<Renderer>().material.color = new Color(0, 0, 1); // Blue
         }
 
         powerUpType = selectedPowerUp.powerUps;
         value = selectedPowerUp.valueIncrease;
-
-        Invoke(nameof(DestroyPowerUp), 30);
     }
 
 

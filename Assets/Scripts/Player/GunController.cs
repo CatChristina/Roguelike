@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class GunController : MonoBehaviour
 {
@@ -16,7 +15,7 @@ public class GunController : MonoBehaviour
 
         _canShoot = true;
 
-        reticle.sizeDelta = new Vector2(spread * 50, spread * 50);
+        UpdateUI();
     }
 
 
@@ -77,7 +76,7 @@ public class GunController : MonoBehaviour
             // Play Out of ammo sound
         }
 
-        ammoText.text = new string('I', _currentAmmo);
+        UpdateUI();
     }
 
     // Readies the weapon to shoot
@@ -96,6 +95,17 @@ public class GunController : MonoBehaviour
             _currentAmmo = _maxAmmo;
         }
 
-        ammoText.text = new string('I', _currentAmmo);
+        UpdateUI();
+    }
+
+
+    // Updates the reticle size based on the spread of the gun and the ammo counter based on the current ammo
+    public void UpdateUI()
+    {
+        if (gameObject.activeInHierarchy)
+        {
+            reticle.sizeDelta = new Vector2(spread * 50, spread * 50);
+            ammoText.text = new string('I', _currentAmmo);
+        }
     }
 }
