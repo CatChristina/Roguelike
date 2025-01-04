@@ -22,8 +22,13 @@ public class ProjectileStats : MonoBehaviour
     private Vector3 previousPosition;
     private HashSet<Collider> hitColliders;
 
-    // Does the raycast for collision detection
     private void FixedUpdate()
+    {
+        DoRaycastCheck();
+    }
+
+    // Does the raycast for collision detection
+    private void DoRaycastCheck()
     {
         RaycastHit hit;
         Vector3 direction = transform.position - previousPosition;
@@ -62,6 +67,7 @@ public class ProjectileStats : MonoBehaviour
             {
                 enemyStats.TakeDamage(damage);
                 Debug.Log("Dealt " + damage);
+                DoRaycastCheck();
             }
             else
             {

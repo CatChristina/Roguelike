@@ -5,11 +5,6 @@ public class WeaponController : MonoBehaviour
     public GameObject weapon1;
     public GameObject weapon2;
 
-    private void Start()
-    {
-
-    }
-
     // Switches between weapons if the player has two weapons
     private void Update()
     {

@@ -18,7 +18,6 @@ public class GunController : MonoBehaviour
         UpdateUI();
     }
 
-
     // Input checks
     private void Update()
     {
@@ -50,7 +49,6 @@ public class GunController : MonoBehaviour
 
     public GameObject _bullet;
     public GameObject _shotPoint;
-
 
     // Fires the gun
     private void ShootGun()
@@ -97,7 +95,6 @@ public class GunController : MonoBehaviour
 
         UpdateUI();
     }
-
 
     // Updates the reticle size based on the spread of the gun and the ammo counter based on the current ammo
     public void UpdateUI()

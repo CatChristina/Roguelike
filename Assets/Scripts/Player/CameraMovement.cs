@@ -18,6 +18,7 @@ public class CameraMovement : MonoBehaviour
     private float yRotation;
 
     private NativeArray<float> rotationData;
+    private JobHandle jobOut;
 
     private void Awake()
     {
@@ -37,7 +38,6 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
-
     // Gets mouse input and runs the other functions
     private void Update()
     {
@@ -45,6 +45,16 @@ public class CameraMovement : MonoBehaviour
         mouseY = Input.GetAxisRaw("Mouse Y");
 
         ScheduleJob();
+    }
+
+    // LateUpdate is called after Update each frame
+    private void LateUpdate()
+    {
+        jobOut.Complete();
+
+        xRotation = rotationData[0];
+        yRotation = rotationData[1];
+
         MousePos();
     }
 
@@ -64,13 +74,8 @@ public class CameraMovement : MonoBehaviour
             rotationData = rotationData
         };
 
-        JobHandle jobHandle = job.Schedule();
-        jobHandle.Complete();
-
-        xRotation = rotationData[0];
-        yRotation = rotationData[1];
+        jobOut = job.Schedule();
     }
-
 
     // Job that handles the cameras rotation, storing the data within the NativeArray
     [BurstCompile]

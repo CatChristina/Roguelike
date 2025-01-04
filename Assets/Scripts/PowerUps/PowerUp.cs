@@ -7,35 +7,36 @@ public class PowerUp : MonoBehaviour
     public PowerUpBase selectedPowerUp;
     [SerializeField] private PowerUps powerUpType;
     [SerializeField] private float value;
-    private PlayerStats entity;
+    private PlayerStats playerStats;
     private PlayerMovement playerMove;
 
     // Sets the PowerUp type, color and value based on a random chance, gets the PlayerStats script to
     private void Awake()
     {
-        entity = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+        playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
         RandomPowerUp();
 
-
+        objRenderer = gameObject.GetComponent<Renderer>();
         Invoke(nameof(DestroyPowerUp), 30);
     }
 
+    // Randomly selects a PowerUp from the PowerUpBase array
     private void RandomPowerUp()
     {
-        int chance = Random.Range(0, 99);
+        int chance = Random.Range(1, 100);
         Debug.Log("Chance = " + chance);
 
-        if (chance <= 14 && chance >= 3)
+        if (chance <= 10)
         {
             selectedPowerUp = powerUpBase[1];
             gameObject.GetComponent<Renderer>().material.color = new Color(1, 0, 0); // Red
         }
-        else if (chance >= 70)
+        else if (chance <= 40)
         {
             selectedPowerUp = powerUpBase[3];
             gameObject.GetComponent<Renderer>().material.color = new Color(0, 1, 0); // Green
         }
-        else
+        else //if (chance <= 55)
         {
             selectedPowerUp = powerUpBase[0];
             gameObject.GetComponent<Renderer>().material.color = new Color(0, 0, 1); // Blue
@@ -44,7 +45,6 @@ public class PowerUp : MonoBehaviour
         powerUpType = selectedPowerUp.powerUps;
         value = selectedPowerUp.valueIncrease;
     }
-
 
     // Checks against the PowerUps enum to determine which function to call
     private void OnTriggerEnter(Collider other)
@@ -57,18 +57,18 @@ public class PowerUp : MonoBehaviour
         switch (powerUpType)
         {
             case PowerUps.XP:
-                entity.ModifyXP(value);
+                playerStats.ModifyXP(value);
                 break;
 
             case PowerUps.Health:
-                entity.ModifyHealth(value);
+                playerStats.ModifyHealth(value);
                 break;
 
             case PowerUps.Speed:
-                entity.ModifySpeed(value);
+                playerStats.ModifySpeed(value);
                 break;
             case PowerUps.Jump:
-                entity.ModifyJumpCount(Mathf.RoundToInt(value));
+                playerStats.ModifyJumpCount(Mathf.RoundToInt(value));
                 break;
             case PowerUps.Ammo:
                 GameObject.FindGameObjectWithTag("PlayerGun").GetComponent<GunController>().RefillAmmo();
@@ -78,13 +78,13 @@ public class PowerUp : MonoBehaviour
         Destroy(gameObject);
     }
 
-
-    int Counter = 50;
+    private int Counter = 50;
+    private Renderer objRenderer;
     // Destroys the PowerUp once Counter reaches 0
     private void DestroyPowerUp()
     {
-        Renderer renderer = gameObject.GetComponent<Renderer>();
-        renderer.enabled = !renderer.enabled;
+
+        objRenderer.enabled = !objRenderer.enabled;
 
         Invoke(nameof(DestroyPowerUp), 0.01f * Counter);
 

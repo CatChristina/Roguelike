@@ -33,7 +33,6 @@ public class PlayerMovement : MonoBehaviour
     public float _moveSpeed;
     public float _maxSpeed = 10;
 
-
     // Contols the basic movement of the player
     private void MovePlayer()
     {
@@ -73,7 +72,6 @@ public class PlayerMovement : MonoBehaviour
     private float _jumpHeight = 100;
     private float checkDelay;
 
-
     // Allows the player to jump
     private void Jump()
     {
@@ -86,7 +84,6 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private Ray _groundRay;
-
 
     // Checks if the player is close enough to the ground
     private bool GroundCheck()

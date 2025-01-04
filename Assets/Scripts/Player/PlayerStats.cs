@@ -92,7 +92,7 @@ public class PlayerStats : MonoBehaviour
 
         if (_health <= 0)
         {
-
+            //Dead
         }
     }
 }
