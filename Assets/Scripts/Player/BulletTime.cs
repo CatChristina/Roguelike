@@ -7,6 +7,12 @@ public class BulletTime : MonoBehaviour
     public float duration;
     public Slider bulletTimeSlider;
     private float bulletTimeDelay;
+    private AudioSource music;
+
+    private void Start()
+    {
+        music = GameObject.FindGameObjectWithTag("GameController").GetComponent<AudioSource>();
+    }
 
     // Cached currentTime to avoid calling Time.time multiple times
     private void Update()
@@ -46,6 +52,7 @@ public class BulletTime : MonoBehaviour
         CancelInvoke(nameof(ResetBulletTime));
         Time.timeScale = bulletTimeScale;
         duration -= Time.unscaledDeltaTime * 10;
+        music.pitch = Mathf.Clamp(Time.timeScale * 1.7f, 0.5f, 1);
     }
 
     private void ResetBulletTime()
@@ -63,5 +70,6 @@ public class BulletTime : MonoBehaviour
     private void ResetTimeScale()
     {
         Time.timeScale = 1;
+        music.pitch = Time.timeScale;
     }
 }

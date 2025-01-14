@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class ItemStore : MonoBehaviour
 {
     public int money;
+    public float moneyMult;
     public TMP_Text cost;
     public TMP_Text description;
     public TMP_Text interactionTMP;
@@ -86,7 +87,7 @@ public class ItemStore : MonoBehaviour
     // Add money to player's account
     public void AddMoney(int amount)
     {
-        money += amount;
+        money += Mathf.CeilToInt(amount * moneyMult);
         moneyHUD.text = "$" + money.ToString();
         moneyStore.text = "$" + money.ToString();
     }

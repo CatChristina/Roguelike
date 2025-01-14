@@ -7,8 +7,7 @@ public class GameController : MonoBehaviour
     public GameObject headsUpDisplay;
     public GameObject deathMenu;
     public GameObject storeMenu;
-
-    public bool isPaused { get; private set; } = false;
+    private bool isPaused = false;
 
     private void Start()
     {

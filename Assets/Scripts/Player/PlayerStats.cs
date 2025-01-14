@@ -50,7 +50,7 @@ public class PlayerStats : MonoBehaviour
     public void ModifyXP(float xpAmount)
     {
         _xp += xpAmount;
-        itemStore.AddMoney(Mathf.RoundToInt(xpAmount / 2));
+        itemStore.AddMoney(Mathf.RoundToInt(xpAmount));
 
         if (_xp > xpSlider.maxValue) // Level up
         {
