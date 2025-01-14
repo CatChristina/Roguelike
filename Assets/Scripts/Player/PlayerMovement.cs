@@ -83,8 +83,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private Ray _groundRay;
-
     // Checks if the player is close enough to the ground
     private bool GroundCheck()
     {
