@@ -11,7 +11,7 @@ public class EnemyAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
 
-        InvokeRepeating(nameof(MoveToPlayer), 0, Random.Range(0.5f, 2));
+        InvokeRepeating(nameof(MoveToPlayer), 0, Random.Range(0.2f, 1.5f));
     }
 
     // Sets the enemies destination to the players position with a random delay
