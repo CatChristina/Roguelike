@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ public class PlayerStats : MonoBehaviour
 
     public TMP_Text speedText;
     public TMP_Text healthText;
+    public TMP_Text levelText;
 
     public Slider healthSlider;
     public Slider xpSlider;
@@ -19,6 +21,8 @@ public class PlayerStats : MonoBehaviour
         _health = _maxHealth;
         healthSlider.maxValue = _maxHealth;
         healthSlider.value = _health;
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        itemStore = GameObject.FindGameObjectWithTag("Store").GetComponent<ItemStore>();
     }
 
     // Damages the player if they collide with an enemy
@@ -40,17 +44,23 @@ public class PlayerStats : MonoBehaviour
 
 
     [SerializeField] private float _xp = 0;
+    private int level = 1;
+    private ItemStore itemStore;
     // Gives the player XP
     public void ModifyXP(float xpAmount)
     {
         _xp += xpAmount;
+        itemStore.AddMoney(Mathf.RoundToInt(xpAmount / 2));
 
-        if (_xp > xpSlider.maxValue)
+        if (_xp > xpSlider.maxValue) // Level up
         {
             _xp -= xpSlider.maxValue;
+            level++;
 
             xpSlider.maxValue += 20;
             healthSlider.maxValue = _maxHealth;
+
+            levelText.text = level.ToString();
 
             ModifyHealth(10);
         }
@@ -83,6 +93,7 @@ public class PlayerStats : MonoBehaviour
         playerMove._maxJumps += value;
     }
 
+    private GameController gameController;
     // Deals damage to the player
     public void TakeDamage(int damage)
     {
@@ -92,7 +103,7 @@ public class PlayerStats : MonoBehaviour
 
         if (_health <= 0)
         {
-            //Dead
+            gameController.PlayerDead();
         }
     }
 }

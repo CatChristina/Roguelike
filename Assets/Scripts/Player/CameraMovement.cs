@@ -22,9 +22,6 @@ public class CameraMovement : MonoBehaviour
 
     private void Awake()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         // Uses a native array to store the rotation data so that it can be accessed by the job thread (ALWAYS destroy this somewhere in the script!!!)
         rotationData = new NativeArray<float>(2, Allocator.Persistent);
     }

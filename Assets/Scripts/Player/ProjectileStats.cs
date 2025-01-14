@@ -11,7 +11,7 @@ public class ProjectileStats : MonoBehaviour
     {
         GunController gun = GameObject.FindGameObjectWithTag("PlayerGun").GetComponent<GunController>();
         rb = GetComponent<Rigidbody>();
-        rb.AddForce(Camera.main.transform.forward * velocity * 10 + new Vector3(Random.Range(-gun.spread, gun.spread), Random.Range(-gun.spread, gun.spread), 1), ForceMode.VelocityChange);
+        rb.AddForce(Camera.main.transform.forward * velocity * 10 + new Vector3(Random.Range(-gun._spread, gun._spread), Random.Range(-gun._spread, gun._spread), 1), ForceMode.VelocityChange);
 
         hitColliders = new HashSet<Collider>();
         damage = gun._damage;
@@ -33,8 +33,9 @@ public class ProjectileStats : MonoBehaviour
         RaycastHit hit;
         Vector3 direction = transform.position - previousPosition;
         float distance = direction.magnitude;
+        float radius = 0.2f; // Projectile hitbox radius
 
-        if (Physics.Raycast(previousPosition, direction, out hit, distance))
+        if (Physics.SphereCast(previousPosition, radius, direction, out hit, distance))
         {
             if (hit.collider != null)
             {
@@ -66,7 +67,6 @@ public class ProjectileStats : MonoBehaviour
             if (enemyStats != null)
             {
                 enemyStats.TakeDamage(damage);
-                Debug.Log("Dealt " + damage);
                 DoRaycastCheck();
             }
             else

@@ -20,23 +20,28 @@ public class PowerUp : MonoBehaviour
         Invoke(nameof(DestroyPowerUp), 30);
     }
 
+    private Renderer powerUpModelRef;
     // Randomly selects a PowerUp from the PowerUpBase array
     private void RandomPowerUp()
     {
         int chance = Random.Range(1, 100);
-        Debug.Log("Chance = " + chance);
 
         if (chance <= 10)
         {
             selectedPowerUp = powerUpBase[1];
             gameObject.GetComponent<Renderer>().material.color = new Color(1, 0, 0); // Red
         }
-        else if (chance <= 40)
+        else if (chance <= 20)
         {
             selectedPowerUp = powerUpBase[3];
             gameObject.GetComponent<Renderer>().material.color = new Color(0, 1, 0); // Green
         }
-        else //if (chance <= 55)
+        else if (chance <= 25)
+        {
+            selectedPowerUp = powerUpBase[4];
+            gameObject.GetComponent<Renderer>().material.color = new Color(1, 1, 0); // Yellow
+        }
+        else if (chance <= 75)
         {
             selectedPowerUp = powerUpBase[0];
             gameObject.GetComponent<Renderer>().material.color = new Color(0, 0, 1); // Blue
@@ -44,6 +49,14 @@ public class PowerUp : MonoBehaviour
 
         powerUpType = selectedPowerUp.powerUps;
         value = selectedPowerUp.valueIncrease;
+
+        // Sets the PowerUp mesh to the selected PowerUp mesh
+        if (selectedPowerUp.powerUpModel != null)
+        {
+            gameObject.GetComponent<Renderer>().enabled = false;
+            GameObject mesh = Instantiate(selectedPowerUp.powerUpModel, gameObject.transform);
+            powerUpModelRef = mesh.GetComponent<Renderer>();
+        }
     }
 
     // Checks against the PowerUps enum to determine which function to call
@@ -78,19 +91,27 @@ public class PowerUp : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private int Counter = 50;
+    private int counter = 50;
     private Renderer objRenderer;
     // Destroys the PowerUp once Counter reaches 0
     private void DestroyPowerUp()
     {
 
-        objRenderer.enabled = !objRenderer.enabled;
+        if (selectedPowerUp.powerUpModel != null)
+        {
+            powerUpModelRef.enabled = !powerUpModelRef.enabled;
+        }
+        else
+        {
+            objRenderer.enabled = !objRenderer.enabled;
+        }
 
-        Invoke(nameof(DestroyPowerUp), 0.01f * Counter);
 
-        Counter--;
+        Invoke(nameof(DestroyPowerUp), 0.01f * counter);
 
-        if (Counter <= 0)
+        counter--;
+
+        if (counter <= 0)
         {
             Destroy(gameObject);
         }

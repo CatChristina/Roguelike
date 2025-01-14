@@ -14,4 +14,5 @@ public class PowerUpBase : ScriptableObject
 {
     public PowerUps powerUps;
     public float valueIncrease;
+    public GameObject powerUpModel;
 }

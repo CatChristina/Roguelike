@@ -11,21 +11,24 @@ public class BulletTime : MonoBehaviour
     // Cached currentTime to avoid calling Time.time multiple times
     private void Update()
     {
-        float currentTime = Time.time;
-
-        if (Input.GetButton("BulletTime") && duration > 0 && bulletTimeDelay < currentTime)
+        if (Time.timeScale != 0)
         {
-            StartBulletTime();
-        }
+            float currentTime = Time.time;
 
-        if (Input.GetButtonUp("BulletTime") && bulletTimeDelay < currentTime)
-        {
-            ResetTimeScale();
-            bulletTimeDelay = currentTime + 1f;
-            InvokeRepeating(nameof(ResetBulletTime), 3, Time.unscaledDeltaTime);
-        }
+            if (Input.GetButton("BulletTime") && duration > 0 && bulletTimeDelay < currentTime)
+            {
+                StartBulletTime();
+            }
 
-        bulletTimeSlider.value = duration;
+            if (Input.GetButtonUp("BulletTime") && bulletTimeDelay < currentTime)
+            {
+                ResetTimeScale();
+                bulletTimeDelay = currentTime + 1f;
+                InvokeRepeating(nameof(ResetBulletTime), 3, Time.unscaledDeltaTime);
+            }
+
+            bulletTimeSlider.value = duration;
+        }
     }
 
     private void FixedUpdate()

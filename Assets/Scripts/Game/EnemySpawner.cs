@@ -40,8 +40,6 @@ public class EnemySpawner : MonoBehaviour
 
             currentWaveEnemies.Add(enemy);
         }
-
-        Debug.Log("Spawning Enemies.");
     }
 
     // Check if all enemies are dead and if so, start the next wave

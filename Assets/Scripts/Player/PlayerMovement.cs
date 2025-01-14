@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 moveDirection = (camRight * horiz + camForward * vert).normalized;
 
-        rb.AddForce(moveDirection * _moveSpeed * Time.deltaTime * 100, ForceMode.Impulse);
+        rb.AddForce(moveDirection * _moveSpeed * Time.deltaTime * 7, ForceMode.VelocityChange);
 
         float tempY = rb.linearVelocity.y;
 
