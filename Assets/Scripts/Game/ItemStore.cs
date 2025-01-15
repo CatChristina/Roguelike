@@ -1,18 +1,21 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ItemStore : MonoBehaviour
 {
     public int money;
     public float moneyMult;
-    public TMP_Text cost;
+    public TMP_Text costTMP;
     public TMP_Text description;
     public TMP_Text interactionTMP;
 
     private GameObject player;
     private GunController _currentWeapon;
     private WeaponController weaponController;
+
+    private ItemData itemData;
 
     private void Start()
     {
@@ -27,24 +30,14 @@ public class ItemStore : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         weaponController = GameObject.FindGameObjectWithTag("GunContainer").GetComponent<WeaponController>();
     }
-
-    // Open store UI when player is in trigger zone and presses F
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                OpenStoreUserInterface();
-            }
-        }
-    }
-
+    
+    private bool _isInTrigger;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             interactionTMP.text = "Press F to open store";
+            _isInTrigger = true;
         }
     }
 
@@ -53,15 +46,23 @@ public class ItemStore : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             interactionTMP.text = "";
+            _isInTrigger = false;
         }
     }
 
     // Close store UI when player presses escape
     private void Update()
     {
+        // Closes the store UI when the player presses escape
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             GoBackOneMenu();
+        }
+
+        // Open store UI when player is in trigger zone and presses F
+        if (Input.GetKeyDown(KeyCode.F) && _isInTrigger)
+        {
+            OpenStoreUserInterface();
         }
     }
 
@@ -92,17 +93,17 @@ public class ItemStore : MonoBehaviour
         moneyStore.text = "$" + money.ToString();
     }
 
-    private void PurchaseItem(int cost)
+    private bool PurchaseItem(int itemCost)
     {
-        if (money >= cost)
+        if (money >= itemCost)
         {
-            money -= cost;
-            moneyHUD.text = "$" + money.ToString();
-            moneyStore.text = "$" + money.ToString();
+            money -= itemCost;
+            return true;
         }
         else
         {
             description.text = "Not enough money!";
+            return false;
         }
     }
 
@@ -169,46 +170,76 @@ public class ItemStore : MonoBehaviour
         return false;
     }
 
+    public int healthCost = 50;
     // Increases player health by a set amount
-    public void PurchaseHealth(int cost)
+    public void PurchaseHealth()
     {
-        player.GetComponent<PlayerStats>().ModifyHealth(20);
-        PurchaseItem(cost);
+        if (PurchaseItem(itemData.cost))
+        {
+            player.GetComponent<PlayerStats>().ModifyHealth(20);
+            itemData.cost += healthCost;
+            UpdateStoreUI();
+        }
     }
 
+    public int ammoCost = 10;
     // Refills player ammo for the current weapon
-    public void PurchaseAmmo(int cost)
+    public void PurchaseAmmo()
     {
-        GameObject.FindGameObjectWithTag("PlayerGun").GetComponent<GunController>().RefillAmmo();
-        PurchaseItem(cost);
+        GunController gunController = GameObject.FindGameObjectWithTag("PlayerGun").GetComponent<GunController>();
+
+        if (gunController._currentAmmo == gunController._maxAmmo)
+        {
+            description.text = "Ammo is full!";
+            return;
+        }
+
+        if (PurchaseItem(itemData.cost))
+        {
+            gunController.RefillAmmo();
+            UpdateStoreUI();
+        }
     }
 
+    public int jumpCost = 1000;
     // Increases player jump count by one
-    public void PurchaseJump(int cost)
+    public void PurchaseJump()
     {
-        player.GetComponent<PlayerStats>().ModifyJumpCount(1);
-        PurchaseItem(cost);
+        if (PurchaseItem(itemData.cost))
+        {
+            player.GetComponent<PlayerStats>().ModifyJumpCount(1);
+            itemData.cost += jumpCost;
+            UpdateStoreUI();
+        }
     }
 
     // Purchases the sniper rifle
     public void PurchaseSniper()
     {
         PurchaseWeapon(weapons[1]);
+        UpdateStoreUI();
     }
 
     // Checks for the cursor entering a button and displays the item's description and cost
     public void OnHoverEnter(Button button)
     {
-        ItemData itemData = button.GetComponent<ItemData>();
+        itemData = button.GetComponent<ItemData>();
 
         description.text = itemData.description;
-        cost.text = "$" + itemData.cost.ToString();
+        UpdateStoreUI();
     }
 
     // Checks if the cursor has left the button and clears the description and cost
     public void OnHoverExit()
     {
         description.text = "";
-        cost.text = "";
+        costTMP.text = "";
+    }
+
+    private void UpdateStoreUI()
+    {
+        moneyHUD.text = "$" + money.ToString();
+        moneyStore.text = "$" + money.ToString();
+        costTMP.text = "$" + itemData.cost.ToString();
     }
 }
