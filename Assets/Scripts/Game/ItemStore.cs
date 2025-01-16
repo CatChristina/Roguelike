@@ -31,6 +31,7 @@ public class ItemStore : MonoBehaviour
         weaponController = GameObject.FindGameObjectWithTag("GunContainer").GetComponent<WeaponController>();
     }
     
+    // Shows the interaction prompt
     private bool _isInTrigger;
     private void OnTriggerEnter(Collider other)
     {
@@ -41,6 +42,7 @@ public class ItemStore : MonoBehaviour
         }
     }
 
+    // Hides the interaction prompt
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -54,7 +56,7 @@ public class ItemStore : MonoBehaviour
     private void Update()
     {
         // Closes the store UI when the player presses escape
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && storeUI.activeInHierarchy)
         {
             GoBackOneMenu();
         }
@@ -66,6 +68,7 @@ public class ItemStore : MonoBehaviour
         }
     }
 
+    // Closes the current menu when the player clicks the back button or presses escape
     public void GoBackOneMenu()
     {
         switch (true)
@@ -93,6 +96,7 @@ public class ItemStore : MonoBehaviour
         moneyStore.text = "$" + money.ToString();
     }
 
+    // Removes money from player's account
     private bool PurchaseItem(int itemCost)
     {
         if (money >= itemCost)
@@ -108,7 +112,7 @@ public class ItemStore : MonoBehaviour
     }
 
     private GameObject storeUI;
-    // Open store UI
+    // Opens the store UI
     private void OpenStoreUserInterface()
     {
         Time.timeScale = 0;
@@ -150,22 +154,30 @@ public class ItemStore : MonoBehaviour
     }
 
     public GameObject[] weapons;
-    // Purchases a weapon and sets it as the player's second weapon if it's not already equipped
+    // Purchases a weapon and sets it as the player's second weapon if they only have one weapon, otherwise it replaces the currently equipped weapon
     public bool PurchaseWeapon(GameObject weapon)
     {
         if (weapon != weaponController.weapon1 && weapon != weaponController.weapon2)
         {
-            if (weaponController.weapon2 == null || weaponController.weapon2.activeInHierarchy)
+            if (weaponController.weapon2 == null)
             {
-                weaponController.weapon2 = weapons[1];
-                return true;
+                weaponController.weapon2 = weapon;
+            }
+            else if(weaponController.weapon2.activeInHierarchy)
+            {
+                weaponController.weapon2.SetActive(false);
+                weaponController.weapon2 = weapon;
+                weaponController.weapon2.SetActive(true);
             }
             else if (weaponController.weapon1.activeInHierarchy)
             {
-                weaponController.weapon1 = weapons[1];
-                return true;
+                weaponController.weapon1.SetActive(false);
+                weaponController.weapon1 = weapon;
+                weaponController.weapon1.SetActive(true);
             }
-            PurchaseItem(weapons[1].GetComponent<GunController>().cost);
+
+            PurchaseItem(weapon.GetComponent<GunController>().cost);
+            return true;
         }
         return false;
     }
@@ -213,11 +225,32 @@ public class ItemStore : MonoBehaviour
         }
     }
 
-    // Purchases the sniper rifle
-    public void PurchaseSniper()
+    // Purchases the shotgun
+    public void PurchaseShotgun()
     {
-        PurchaseWeapon(weapons[1]);
-        UpdateStoreUI();
+        if (PurchaseWeapon(weapons[0]))
+        {
+            moneyHUD.text = "$" + money.ToString();
+            moneyStore.text = "$" + money.ToString();
+        }
+    }
+    // Purchases the sniper rifle
+    public void PurchaseSniperRifle()
+    {
+        if (PurchaseWeapon(weapons[1]))
+        {
+            moneyHUD.text = "$" + money.ToString();
+            moneyStore.text = "$" + money.ToString();
+        }
+    }
+    // Purchases the rocket launcher
+    public void PurchaseRocketLauncher()
+    {
+        if (PurchaseWeapon(weapons[2]))
+        {
+            moneyHUD.text = "$" + money.ToString();
+            moneyStore.text = "$" + money.ToString();
+        }
     }
 
     // Checks for the cursor entering a button and displays the item's description and cost
@@ -236,6 +269,7 @@ public class ItemStore : MonoBehaviour
         costTMP.text = "";
     }
 
+    // Updates the money text on the HUD and store UI as well as the cost of the item
     private void UpdateStoreUI()
     {
         moneyHUD.text = "$" + money.ToString();

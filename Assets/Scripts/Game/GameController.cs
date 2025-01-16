@@ -7,7 +7,7 @@ public class GameController : MonoBehaviour
     public GameObject headsUpDisplay;
     public GameObject deathMenu;
     public GameObject storeMenu;
-    private bool isPaused = false;
+    public bool isPaused = false;
 
     private void Start()
     {
@@ -27,12 +27,14 @@ public class GameController : MonoBehaviour
         {
             ResumeGame();
         }
+
+        Debug.Log(Time.timeScale.ToString());
     }
 
     // Pauses the game
     public void PauseGame()
     {
-        Time.timeScale = 0;
+        PauseTime();
         pauseMenu.SetActive(true);
         headsUpDisplay.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
@@ -49,15 +51,22 @@ public class GameController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         isPaused = false;
+
+        Debug.Log("Resumed");
     }
 
     // Shows the death screen upon player death
     public void PlayerDead()
     {
-        Time.timeScale = 0;
+        PauseTime();
         deathMenu.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+    }
+
+    public void PauseTime()
+    {
+        Time.timeScale = 0;
     }
 
     // Restarts the game

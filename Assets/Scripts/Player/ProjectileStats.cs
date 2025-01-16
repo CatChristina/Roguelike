@@ -5,13 +5,17 @@ public class ProjectileStats : MonoBehaviour
 {
     public int damage;
     public float velocity;
+    public bool isRocket;
     private Rigidbody rb;
 
+    // Gets variables and applies the projectile velocity
     private void Start()
     {
         GunController gun = GameObject.FindGameObjectWithTag("PlayerGun").GetComponent<GunController>();
         rb = GetComponent<Rigidbody>();
-        rb.AddForce(Camera.main.transform.forward * velocity * 10 + new Vector3(Random.Range(-gun._spread, gun._spread), Random.Range(-gun._spread, gun._spread), 1), ForceMode.VelocityChange);
+        Camera cam = Camera.main;
+        rb.AddForce(cam.transform.forward * velocity * 10 + new Vector3(Random.Range(-gun._spread, gun._spread), Random.Range(-gun._spread, gun._spread), 1), ForceMode.VelocityChange);
+        transform.rotation = cam.transform.rotation;
 
         hitColliders = new HashSet<Collider>();
         damage = gun._damage;
@@ -37,7 +41,7 @@ public class ProjectileStats : MonoBehaviour
 
         if (Physics.SphereCast(previousPosition, radius, direction, out hit, distance))
         {
-            if (hit.collider != null)
+            if (hit.collider != null && !isRocket)
             {
                 DoCollisionCheck(hit.collider);
             }
@@ -81,5 +85,23 @@ public class ProjectileStats : MonoBehaviour
         {
             Destroy(gameObject, 0.001f);
         }
+    }
+
+    // Checks for collision with enemies and triggers the rocket explosion
+    private void OnTriggerEnter(Collider other)
+    {
+        if (isRocket && !other.CompareTag("Projectile") && !other.CompareTag("Player") && !other.CompareTag("PlayerGun"))
+        {
+            ExplodeRocket();
+        }
+    }
+
+    public GameObject explosion;
+    // Explodes the rocket and deals damage to all enemies in the radius
+    private void ExplodeRocket()
+    {
+        GameObject exploded = Instantiate(explosion, transform.position, transform.rotation);
+        exploded.GetComponent<Explosion>().damage = damage;
+        Destroy(gameObject, 0.001f);
     }
 }

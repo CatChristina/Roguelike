@@ -27,7 +27,7 @@ public class EnemyStats : MonoBehaviour
 
             player.ModifyXP(xpOnKill);
 
-            if (dropChance <= 10)
+            if (dropChance <= 15)
             {
                 Instantiate(powerUp, transform.position, transform.rotation);
             }

@@ -8,10 +8,12 @@ public class BulletTime : MonoBehaviour
     public Slider bulletTimeSlider;
     private float bulletTimeDelay;
     private AudioSource music;
+    private GameController gameController;
 
     private void Start()
     {
         music = GameObject.FindGameObjectWithTag("GameController").GetComponent<AudioSource>();
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     }
 
     // Cached currentTime to avoid calling Time.time multiple times
@@ -39,7 +41,7 @@ public class BulletTime : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (duration <= 0)
+        if (duration <= 0 && !gameController.isPaused)
         {
             ResetTimeScale();
             InvokeRepeating(nameof(ResetBulletTime), 3, 0.033f);

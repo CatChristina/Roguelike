@@ -66,7 +66,7 @@ public class GunController : MonoBehaviour
     [Header("Spread and Recoil")]
     public float _spread;
 
-    private bool _canShoot;
+    public bool _canShoot { get; private set; }
 
     [Header("Shop Info")]
     public int cost; // Cost of the weapon at the store

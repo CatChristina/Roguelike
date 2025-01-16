@@ -42,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 camForward = camReference.transform.forward;
         Vector3 camRight = camReference.transform.right;
 
+        // Normalizes the cameras forward direction so that the player only moves along the X and Z axis
         camForward.y = 0;
         camForward = camForward.normalized;
 
@@ -49,6 +50,7 @@ public class PlayerMovement : MonoBehaviour
 
         rb.AddForce(moveDirection * _moveSpeed * Time.deltaTime * 7, ForceMode.VelocityChange);
 
+        // Stores the Y velocity so that it can be reapplied after the player's velocity is clamped, this stops the Y velocity from being clamped
         float tempY = rb.linearVelocity.y;
 
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
@@ -62,6 +64,7 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, 0);
         }
 
+        // Reapplies the Y velocity
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, tempY, rb.linearVelocity.z);
     }
 
